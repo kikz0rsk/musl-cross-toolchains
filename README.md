@@ -1,9 +1,9 @@
 # Alpine musl cross toolchains
 
-Builds GCC cross toolchains targeting Alpine [musl libc](https://musl.libc.org/) for three major architectures using
+Builds GCC self-contained, statically linked cross-compiling toolchains targeting Alpine [musl libc](https://musl.libc.org/) for three major architectures using
 [richfelker/musl-cross-make](https://github.com/richfelker/musl-cross-make). The pre-built toolchains are published as GitHub release assets.
 
-Even though the toolchains are already pre-built, you can easily use these scripts to build them yourself. All logic is in [`build.sh`](build.sh). The `Dockerfile` prepares a unified build environment, which the CI workflow uses.
+Even though the toolchains are already pre-built, you can easily use these scripts to build them yourself. All logic is in [`build.sh`](build.sh) and the `Dockerfile` provides a unified build environment, which the CI workflow uses.
 
 ## Targets
 
@@ -15,13 +15,13 @@ Host architecture for toolchains is `x86_64 Linux`. The toolchains produced are:
 | `armv7l-linux-musleabihf` | 32-bit ARMv7-A, hard float (VFPv3-D16, Thumb-2) |
 | `aarch64-linux-musl` | 64-bit ARMv8-A (AArch64) |
 
-Each toolchain ships Linux kernel headers in its sysroot.
+Each toolchain is statically linked & ships Linux kernel headers in its sysroot.
 
 ## Component versions
 
-Versions are configurable. On every run `build.sh` scans the musl-cross-make checkout and picks the newest release it supports. Check the `patches/` and `hashes/` directories of [musl-cross-make](https://github.com/richfelker/musl-cross-make) for supported versions.
+Versions are configurable. On every run `build.sh` scans the musl-cross-make checkout and picks the newest components it supports. Check the `patches/` and `hashes/` directories of [musl-cross-make](https://github.com/richfelker/musl-cross-make) for supported versions.
 
-Run `./build.sh versions` to print what the current checkout resolves to. New
+Run `./build.sh versions` to print what the current settings resolve to. New
 upstream releases are picked up automatically as musl-cross-make adds support
 for them.
 
