@@ -1,0 +1,15 @@
+# docker compose run --rm build
+# docker compose run --rm build ./build.sh build aarch64-linux-musl
+# docker compose run --rm build ./build.sh versions
+services:
+  build:
+    build: .
+    image: musl-cross-toolchains:latest
+    volumes:
+      - .:/work
+    working_dir: /work
+    environment:
+      JOBS: ${JOBS:-}
+      SLIM: ${SLIM:-1}
+      MCM_REF: ${MCM_REF:-master}
+    command: ["./build.sh", "build"]

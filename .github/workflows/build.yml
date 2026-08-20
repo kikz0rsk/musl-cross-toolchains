@@ -1,0 +1,106 @@
+name: build toolchains
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Publish a release under this tag (empty = workflow artifacts only)"
+        required: false
+        default: ""
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - x86_64-linux-musl
+          - armv7l-linux-musleabihf
+          - aarch64-linux-musl
+        gcc:
+          - "15.1.0"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache source tarballs
+        uses: actions/cache@v4
+        with:
+          path: build/sources
+          key: mcm-sources
+          restore-keys: mcm-sources-
+
+      - name: Run build in docker
+        run: |
+          docker compose run --rm --build -e GCC_VER=${{ matrix.gcc }} build ./build.sh build ${{ matrix.target }}
+
+      - name: Upload toolchain
+        uses: actions/upload-artifact@v4
+        with:
+          name: toolchain-gcc${{ matrix.gcc }}-${{ matrix.target }}
+          path: |
+            dist/*.tar.gz
+            dist/*.tar.gz.sha256
+            dist/records/*.tsv
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buildlog-${{ matrix.target }}
+          path: build/logs/*.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+  release:
+    name: publish release
+    needs: build
+    if: github.event.inputs.release_tag != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect toolchains from the build matrix
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: toolchain-*
+          merge-multiple: true
+
+      - name: Generate manifest files
+        run: |
+          docker compose run --rm --build build ./build.sh manifest
+
+      - name: Publish to GitHub Releases
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.release_tag || github.ref_name }}
+        run: |
+          assets=(dist/*.tar.gz dist/*.tar.gz.sha256 dist/SHA256SUMS dist/manifest.json)
+          assets=$(echo "$assets" | sort -V -r)
+          echo "publishing ${#assets[@]} assets to $TAG"
+
+          # Re-running the workflow refreshes existing assets
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${assets[@]}" --clobber
+            gh release edit "$TAG" --notes-file dist/RELEASE_NOTES.md
+          else
+            gh release create "$TAG" "${assets[@]}" \
+              --target "$GITHUB_SHA" \
+              --title "musl cross toolchains $TAG" \
+              --notes-file dist/RELEASE_NOTES.md
+          fi
