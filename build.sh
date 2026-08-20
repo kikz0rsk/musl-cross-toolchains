@@ -201,11 +201,15 @@ MPFR_VER = $MPFR_VER
 ISL_VER = $ISL_VER
 LINUX_VER = $LINUX_VER
 
-DL_CMD = curl -L --retry 4 --retry-delay 2 -o
+# some options to handle errors better
+DL_CMD = curl -L -f --retry 6 --retry-delay 2 -o
 
 COMMON_CONFIG += --disable-nls
 COMMON_CONFIG += --with-debug-prefix-map=\$(CURDIR)=
 $slim_cfg
+
+# ftpmirror most of the time would not work...
+GNU_SITE = https://ftp.gnu.org/gnu/
 
 GCC_CONFIG += --enable-languages=c,c++
 GCC_CONFIG += --enable-lto
