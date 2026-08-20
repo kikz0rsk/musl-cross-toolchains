@@ -40,7 +40,7 @@ jobs:
 
       - name: Run build in docker
         run: |
-          docker compose run --rm --build -e GCC_VER=${{ matrix.gcc }} build ./build.sh build ${{ matrix.target }}
+          docker compose run --rm --build -e GCC_VER=${{ matrix.gcc }} build build ${{ matrix.target }}
 
       - name: Upload toolchain
         uses: actions/upload-artifact@v4
@@ -82,7 +82,7 @@ jobs:
 
       - name: Generate manifest files
         run: |
-          docker compose run --rm --build build ./build.sh manifest
+          docker compose run --rm --build build manifest
 
       - name: Publish to GitHub Releases
         shell: bash
