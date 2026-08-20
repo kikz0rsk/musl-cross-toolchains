@@ -26,7 +26,7 @@ RUN apk add --no-cache bash \
         qemu-x86_64
 
 COPY --link build.sh /work/build.sh
-RUN ln -s /bin/mkdir /usr/bin/mkdir
+RUN chmod +x /work/build.sh && ln -s /bin/mkdir /usr/bin/mkdir
 
 WORKDIR /work
 ENTRYPOINT ["./build.sh"]
