@@ -447,10 +447,12 @@ main() {
 			;;
 		clean)
 			log "removing build trees, keeping ${SRC_DIR#"$ROOT"/}"
+			step rm -rf "$OUT_DIR" "$LOG_DIR" "$MCM_DIR"
 			rm -rf "$OUT_DIR" "$LOG_DIR" "$MCM_DIR"
 			;;
 		distclean)
 			log "removing ${BUILD_DIR#"$ROOT"/} and ${DIST_DIR#"$ROOT"/}"
+			step rm -rf "$BUILD_DIR" "$DIST_DIR"
 			rm -rf "$BUILD_DIR" "$DIST_DIR"
 			;;
 		help|-h|--help)
