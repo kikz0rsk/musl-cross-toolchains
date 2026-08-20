@@ -15,6 +15,10 @@ RUN apk add --no-cache bash \
         gzip \
         tar \
         gawk \
+        rsync \
+        texinfo \
+        bison \
+        flex \
         autoconf \
         automake \
         qemu-armeb \
