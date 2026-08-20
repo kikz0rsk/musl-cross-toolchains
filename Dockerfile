@@ -29,5 +29,5 @@ COPY --link build.sh /work/build.sh
 RUN ln -s /bin/mkdir /usr/bin/mkdir
 
 WORKDIR /work
-ENTRYPOINT []
-CMD ["./build.sh", "build"]
+ENTRYPOINT ["./build.sh"]
+CMD ["build"]
