@@ -36,7 +36,7 @@ jobs:
         with:
           path: build/sources
           key: mcm-sources
-          restore-keys: mcm-sources-
+          restore-keys: mcm-sources
 
       - name: Run build in docker
         run: |
@@ -65,7 +65,7 @@ jobs:
   release:
     name: publish release
     needs: build
-    if: github.event.inputs.release_tag != ''
+    if: github.ref_name != '' || github.event.inputs.release_tag != ''
     runs-on: ubuntu-latest
     permissions:
       contents: write
