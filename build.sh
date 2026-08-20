@@ -183,7 +183,10 @@ print_versions() {
 }
 
 write_config_mak() {
-	local target=$1 output=$2 slim_cfg=
+	local target=$1 
+	local output=$2
+	local slim_cfg=''
+	
 	if [ "$SLIM" = 1 ]; then
 		slim_cfg='COMMON_CONFIG += CFLAGS="-g0 -O2" CXXFLAGS="-g0 -O2" LDFLAGS="-s"'
 	fi
@@ -204,6 +207,7 @@ LINUX_VER = $LINUX_VER
 # some options to handle errors better
 DL_CMD = curl -L -f --retry 6 --retry-delay 2 -o
 
+COMMON_CONFIG += CC="gcc -static --static" CXX="g++ -static --static"
 COMMON_CONFIG += --disable-nls
 COMMON_CONFIG += --with-debug-prefix-map=\$(CURDIR)=
 $slim_cfg
