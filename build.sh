@@ -75,7 +75,7 @@ target_elf_machine() {
 target_qemu() {
 	case $1 in
 		x86_64-linux-musl)       printf '%s' 'qemu-x86_64' ;;
-		armv7l-linux-musleabihf) printf '%s' 'qemu-armeb' ;;
+		armv7l-linux-musleabihf) printf '%s' 'qemu-arm' ;;
 		aarch64-linux-musl)      printf '%s' 'qemu-aarch64' ;;
 		*)                       printf '%s' '' ;;
 	esac

@@ -21,7 +21,7 @@ RUN apk add --no-cache bash \
         flex \
         autoconf \
         automake \
-        qemu-armeb \
+        qemu-arm \
         qemu-aarch64 \
         qemu-x86_64
 
