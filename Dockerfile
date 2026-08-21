@@ -5,6 +5,7 @@ FROM alpine:3.24
 RUN apk add --no-cache bash \
         coreutils \
         build-base \
+        mold \
         xz \
         jq \
         ca-certificates \
