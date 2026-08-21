@@ -97,10 +97,9 @@ jobs:
           # Re-running the workflow refreshes existing assets
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "${assets[@]}" --clobber
-            gh release edit "$TAG" --notes-file dist/RELEASE_NOTES.md
+            gh release edit "$TAG"
           else
             gh release create "$TAG" "${assets[@]}" \
               --target "$GITHUB_SHA" \
-              --title "musl cross toolchains $TAG" \
-              --notes-file dist/RELEASE_NOTES.md
+              --title "musl cross toolchains $TAG"
           fi
