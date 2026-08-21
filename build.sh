@@ -211,7 +211,7 @@ ISL_VER = $ISL_VER
 LINUX_VER = $LINUX_VER
 
 # some options to handle errors better
-DL_CMD = curl -L -f --retry 6 --retry-delay 2 -o
+DL_CMD = curl -L -f --retry 10 -o
 
 COMMON_CONFIG += CC="gcc -static --static" CXX="g++ -static --static"
 COMMON_CONFIG += --disable-nls
