@@ -41,15 +41,17 @@ This is the easiest way. Requires Docker installed.
 Run the pre-configured docker compose
 
 ```sh
-docker compose run --rm --build build ./build.sh build
+docker compose run --rm --build build build
 ```
 
 or, run the container manually
 
 ```sh
 docker build -t musl-cross-toolchains .
-docker run --rm -v ./:/work musl-cross-toolchains ./build.sh build
+docker run --rm -v ./:/work musl-cross-toolchains build
 ```
+
+The image's entrypoint is pre-configured to `build.sh`.
 
 ### Linux host
 
