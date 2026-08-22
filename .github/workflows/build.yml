@@ -101,5 +101,5 @@ jobs:
           else
             gh release create "$TAG" "${assets[@]}" \
               --target "$GITHUB_SHA" \
-              --title "musl cross toolchains $TAG"
+              --title "$TAG"
           fi
